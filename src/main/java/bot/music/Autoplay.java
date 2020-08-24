@@ -60,8 +60,8 @@ public final class Autoplay extends AudioEventAdapter {
 
     @Override
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-        musicPlayer.queueList.add(0, track.makeClone());
-        musicPlayer.player.stopTrack();
+        musicPlayer.addToQueue(0, track.makeClone());
+        musicPlayer.stopTrack();
         musicPlayer.createEmbed(Color.RED, "The track got stuck. Restarting Track");
     }
 }

@@ -14,13 +14,14 @@ import reactor.core.publisher.Mono;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GuildMusicPlayer {
 
     private Mono<VoiceConnection> voiceConnection;
     private Mono<MessageChannel> channel;
-    private final List<AudioTrack> queue = new ArrayList<>();
+    private final List<AudioTrack> queue = new LinkedList<>();
     private AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
     private final AudioPlayer player = playerManager.createPlayer();
     private AudioProvider provider = new LavaPlayerAudioProvider(player);
@@ -50,6 +51,18 @@ public class GuildMusicPlayer {
 
     public void playTrack(AudioTrack track) {
         player.playTrack(track);
+    }
+
+    public void addToQueue(AudioTrack track) {
+        queue.add(track);
+    }
+
+    public void addToQueue(int position, AudioTrack track) {
+        queue.add(position, track);
+    }
+
+    public void stopTrack() {
+        player.stopTrack();
     }
 
     public void createEmbed(String text) {
