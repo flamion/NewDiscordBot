@@ -106,6 +106,7 @@ public class BotMain {
 
 
         gateway.getEventDispatcher().on(MessageCreateEvent.class)
+                .filterWhen(event -> Mono.justOrEmpty(event.getMessage().getAuthor()).map(user -> !user.isBot()))
                 .flatMap(event -> Mono.just(event.getMessage().getContent())
                         .flatMap(content -> Flux.fromIterable(commands.entrySet())
                                 .filter(entry -> content.startsWith(PREFIX + entry.getKey()))
