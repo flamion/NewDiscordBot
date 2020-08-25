@@ -79,6 +79,12 @@ public class BotMain {
                 .doOnNext(guildId -> players.get(guildId).listQueue(event.getMessage().getContent()))
                 .then());
 
+        commands.put("clear", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).clearQueue())
+                .then());
+
         commands.put("loop", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)

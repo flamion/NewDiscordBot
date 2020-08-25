@@ -117,6 +117,11 @@ public class GuildMusicPlayer {
         createEmbed(builder.toString());
     }
 
+    public void clearQueue() {
+        queue.clear();
+        createEmbed("Cleared queue");
+    }
+
     public void stopTrack() {
         player.stopTrack();
     }
