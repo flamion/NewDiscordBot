@@ -1,5 +1,6 @@
 package bot.music;
 
+import bot.TimeFormatter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -109,6 +110,55 @@ public class GuildMusicPlayer {
         }
     }
 
+    private String infoCurrentSong() {
+        StringBuilder builder = new StringBuilder();
+        if (player.getPlayingTrack() != null) {
+            builder.append("Title: ").append(player.getPlayingTrack().getInfo().title).append("\n");
+            builder.append("Link: <").append(player.getPlayingTrack().getInfo().uri).append(">").append(" \n");
+            builder.append(TimeFormatter.generalTimeFormatter("Duration: ", player.getPlayingTrack().getDuration()));
+            builder.append(TimeFormatter.generalTimeFormatter("Duration left: ", player.getPlayingTrack().getDuration() - player.getPlayingTrack().getPosition()));
+        } else {
+            builder.append("No song is currently playing");
+        }
+        if (loop) {
+            builder.append("\nLoop Enabled");
+        } else {
+            builder.append("\nLoop disabled");
+        }
+        return builder.toString();
+    }
+
+    private String infoOfIndex(int index) throws IndexOutOfBoundsException {
+        AudioTrack track = queue.get(index);
+        StringBuilder builder = new StringBuilder();
+        builder.append("Title: ").append(track.getInfo().title).append("\n");
+        builder.append("Link: <").append(track.getInfo().uri).append(">").append(" \n");
+        builder.append(TimeFormatter.generalTimeFormatter("Duration: ", track.getDuration()));
+        if (loop) {
+            builder.append("\nLoop Enabled");
+        } else {
+            builder.append("\nLoop disabled");
+        }
+        return builder.toString();
+    }
+
+    public void info(String content) {
+        try {
+            String[] split = content.split(" ");
+            if (split.length < 2) {
+                createEmbed(infoCurrentSong());
+            } else {
+                createEmbed(infoOfIndex(Integer.parseInt(split[1])));
+            }
+        } catch (NumberFormatException e) {
+            createEmbed("Invalid Arguments");
+        } catch (IndexOutOfBoundsException e) {
+            createEmbed("Specified track not in queue");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void disconnect() {
         voiceConnection.flatMap(VoiceConnection::disconnect).subscribe();
     }
@@ -116,7 +166,7 @@ public class GuildMusicPlayer {
     public void playLink(String content) {
         if (isValidLink(content)) {
             createEmbed(Color.GREEN, "Link Valid");
-            playerManager.loadItem(safeSplit(content), scheduler);
+            playerManager.loadItem(safeArgumentSplit(content), scheduler);
         } else {
             createEmbed(Color.RED, "Invalid Link Provided");
         }
@@ -134,7 +184,7 @@ public class GuildMusicPlayer {
         return link.toLowerCase().contains("youtube") || link.toLowerCase().contains("youtu.be");
     }
 
-    private String safeSplit(String content) {
+    private String safeArgumentSplit(String content) {
         String[] split = content.split(" ");
         if (split.length > 1) {
             return split[1];
