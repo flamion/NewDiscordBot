@@ -11,37 +11,37 @@ import discord4j.rest.util.Color;
 
 public final class Autoplay extends AudioEventAdapter {
 
-    private final GuildMusicPlayer musicPlayer;
+    private final GuildMusicPlayer guildMusicPlayer;
 
     public Autoplay(GuildMusicPlayer player) {
-        this.musicPlayer = player;
+        this.guildMusicPlayer = player;
     }
 
     @Override
     public void onPlayerPause(AudioPlayer player) {
-        musicPlayer.createEmbed(Color.GREEN, "Player paused");
+        guildMusicPlayer.createEmbed(Color.GREEN, "Player paused");
     }
 
     @Override
     public void onPlayerResume(AudioPlayer player) {
-        musicPlayer.createEmbed(Color.GREEN, "Player resumed playing");
+        guildMusicPlayer.createEmbed(Color.GREEN, "Player resumed playing");
     }
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        musicPlayer.createEmbed("Now playing: \n" +
+        guildMusicPlayer.createEmbed("Now playing: \n" +
                 "Name: " + track.getInfo().title);
 
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (musicPlayer.loopActive()) {
-            musicPlayer.playTrack(track.makeClone());
+        if (guildMusicPlayer.loopActive()) {
+            guildMusicPlayer.playTrack(track.makeClone());
             return;
         }
         if (endReason.mayStartNext) {
-            //musicPlayer.startPlay();
+            guildMusicPlayer.startPlay();
         }
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
         // endReason == LOAD_FAILED: Loading of a track failed (mayStartNext = true).
@@ -60,8 +60,8 @@ public final class Autoplay extends AudioEventAdapter {
 
     @Override
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-        musicPlayer.addToQueue(0, track.makeClone());
-        musicPlayer.stopTrack();
-        musicPlayer.createEmbed(Color.RED, "The track got stuck. Restarting Track");
+        guildMusicPlayer.addToQueue(0, track.makeClone());
+        guildMusicPlayer.stopTrack();
+        guildMusicPlayer.createEmbed(Color.RED, "The track got stuck. Restarting Track");
     }
 }
