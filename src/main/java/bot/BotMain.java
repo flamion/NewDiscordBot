@@ -1,5 +1,6 @@
 package bot;
 
+import bot.music.GuildMusicPlayer;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
@@ -8,7 +9,6 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.rest.util.Color;
-import bot.music.GuildMusicPlayer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -96,7 +96,6 @@ public class BotMain {
 
         gateway.on(ReadyEvent.class)
                 .subscribe(ready -> toConsole("Logged in as " + ready.getSelf().getUsername() + "#" + ready.getSelf().getDiscriminator()));
-
 
 
         gateway.getEventDispatcher().on(MessageCreateEvent.class)

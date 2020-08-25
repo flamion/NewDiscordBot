@@ -12,24 +12,21 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
-import javax.sound.midi.Track;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GuildMusicPlayer {
 
-    private Mono<VoiceConnection> voiceConnection;
-    private Mono<MessageChannel> channel;
     private final List<AudioTrack> queue = new LinkedList<>();
-    private AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-    private final AudioPlayer player = playerManager.createPlayer();
-    private AudioProvider provider = new LavaPlayerAudioProvider(player);
     private final TrackScheduler scheduler = new TrackScheduler(this);
     private final Autoplay autoplay = new Autoplay(this);
-
+    private Mono<VoiceConnection> voiceConnection;
+    private Mono<MessageChannel> channel;
+    private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+    private final AudioPlayer player = playerManager.createPlayer();
+    private final AudioProvider provider = new LavaPlayerAudioProvider(player);
     private boolean loop = false;
 
 
@@ -39,6 +36,13 @@ public class GuildMusicPlayer {
         AudioSourceManagers.registerRemoteSources(playerManager);
         player.addListener(autoplay);
     }
+
+    private static void toConsole(String toConsole) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        System.out.println(formatter.format(date) + " " + toConsole);
+    }
+
 
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
         this.voiceConnection = connection;
@@ -133,11 +137,5 @@ public class GuildMusicPlayer {
             return split[1];
         }
         return "";
-    }
-
-    private static void toConsole(String toConsole) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        System.out.println(formatter.format(date) + " " + toConsole);
     }
 }
