@@ -13,9 +13,6 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
-import bot.BotMain;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,22 +21,23 @@ public class GuildMusicPlayer {
     private final List<AudioTrack> queue = new LinkedList<>();
     private final TrackScheduler scheduler = new TrackScheduler(this);
     private final Autoplay autoplay = new Autoplay(this);
-    private Mono<VoiceConnection> voiceConnection;
-    private Mono<MessageChannel> channel;
     private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
     private final AudioPlayer player = playerManager.createPlayer();
     private final AudioProvider provider = new LavaPlayerAudioProvider(player);
+    private Mono<VoiceConnection> voiceConnection;
+    private Mono<MessageChannel> channel;
     private boolean loop = false;
 
 
     /**
-     * @param channel
+     * @param channel the message channel the bot should use. It in the constructor since the bot sends a message when it first joins
      */
     public GuildMusicPlayer(Mono<MessageChannel> channel) {
         this.channel = channel;
         playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
         AudioSourceManagers.registerRemoteSources(playerManager);
         player.addListener(autoplay);
+        createEmbed(Color.GREEN, "Joining your channel");
     }
 
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
