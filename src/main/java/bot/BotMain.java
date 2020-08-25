@@ -97,7 +97,7 @@ public class BotMain {
                 .then());
 
         commands.put("help", event -> event.getMessage().getChannel()
-                .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription(new Help().getHelp(event.getMessage().getContent()))))
+                .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription(Help.getHelp(event.getMessage().getContent()))))
                 .then());
     }
 

@@ -2,12 +2,12 @@ package bot;
 
 public class Help {
 
-    public String getHelp(String input) {
+    public static String getHelp(String input) {
         String[] stringArray = input.split(" ");
         return getHelpMessage(stringArray[1]);
     }
 
-    public String getHelpMessage(String input) {
+    public static String getHelpMessage(String input) {
         switch (input) {
             case "ping":
                 return input + " \npong";
