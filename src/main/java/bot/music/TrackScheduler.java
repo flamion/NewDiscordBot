@@ -24,6 +24,7 @@ public final class TrackScheduler implements AudioLoadResultHandler {
     @Override
     public void playlistLoaded(final AudioPlaylist playlist) {
         guildMusicPlayer.addToQueue(playlist.getTracks());
+        guildMusicPlayer.startPlay();
     }
 
     @Override

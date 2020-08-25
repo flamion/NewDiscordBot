@@ -13,6 +13,7 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,6 +88,33 @@ public class GuildMusicPlayer {
 
     public void addToQueue(int position, AudioTrack track) {
         queue.add(position, track);
+    }
+
+    public void listQueue(String content) {
+        StringBuilder builder = new StringBuilder();
+        try {
+            if (queue.size() == 0) {
+                builder.append("Queue is empty");
+            }
+            String[] split = content.split(" ");
+            int page;
+            if (split.length < 2) {
+                page = 1;
+            } else {
+                page = Math.max(Integer.parseInt(split[1]), 1);
+            }
+            for (int i = 15 * (page - 1); i < 15 * page; i++) {
+                AudioTrack track = queue.get(i);
+                builder.append(i);
+                builder.append(". ");
+                builder.append(track.getInfo().title);
+                builder.append("\n");
+            }
+            builder.append("\nPage ").append(page).append(" of ").append((queue.size() / 15));
+        } catch (IndexOutOfBoundsException ignore) {
+
+        }
+        createEmbed(builder.toString());
     }
 
     public void stopTrack() {
@@ -165,7 +193,6 @@ public class GuildMusicPlayer {
 
     public void playLink(String content) {
         if (isValidLink(content)) {
-            createEmbed(Color.GREEN, "Link Valid");
             playerManager.loadItem(safeArgumentSplit(content), scheduler);
         } else {
             createEmbed(Color.RED, "Invalid Link Provided");

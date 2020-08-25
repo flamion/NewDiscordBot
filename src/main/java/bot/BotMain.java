@@ -73,6 +73,12 @@ public class BotMain {
                 .doOnNext(guildId -> players.get(guildId).info(event.getMessage().getContent()))
                 .then());
 
+        commands.put("queue", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).listQueue(event.getMessage().getContent()))
+                .then());
+
         commands.put("loop", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
@@ -80,7 +86,7 @@ public class BotMain {
                 .doOnNext(guildId -> players.get(guildId).switchLoopState())
                 .then());
 
-        commands.put("disconnect", event -> Mono.justOrEmpty(event.getGuildId())
+        commands.put("leave", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
                 .doOnNext(guildId -> players.get(guildId).disconnect())
