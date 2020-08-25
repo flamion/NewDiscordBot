@@ -13,6 +13,7 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
+import bot.BotMain;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -40,13 +41,6 @@ public class GuildMusicPlayer {
         AudioSourceManagers.registerRemoteSources(playerManager);
         player.addListener(autoplay);
     }
-
-    private static void toConsole(String toConsole) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        System.out.println(formatter.format(date) + " " + toConsole);
-    }
-
 
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
         this.voiceConnection = connection;
