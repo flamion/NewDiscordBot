@@ -117,6 +117,9 @@ public class BotMain {
         gateway.onDisconnect().block();
     }
 
+    /**
+     * @param toConsole Prints the input String to the console with date and time for easier/nicer printing
+     */
     public static void toConsole(String toConsole) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
