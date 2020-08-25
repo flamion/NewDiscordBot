@@ -40,10 +40,18 @@ public class GuildMusicPlayer {
         createEmbed(Color.GREEN, "Joining your channel");
     }
 
+    /**
+     * @param connection The currently active voiceconnection thats assigned to the player.
+     *                   In the Future this will be migrated to the Voice connection registry
+     */
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
         this.voiceConnection = connection;
     }
 
+    /**
+     * @param channel Sets the currently used Text Channel.
+     *                This is supposed to be updated every time the bot receives a new message thats relevant to the {@link GuildMusicPlayer}
+     */
     public void setMessageChannel(Mono<MessageChannel> channel) {
         this.channel = channel;
     }
@@ -176,6 +184,10 @@ public class GuildMusicPlayer {
         return link.toLowerCase().contains("youtube") || link.toLowerCase().contains("youtu.be");
     }
 
+    /**
+     * @param content used to split a message into its contents and returning the second word (Which could be a link or an argument)
+     * @return returns the second word of the input, like an argument or a link for certain commands. returns an empty string to avoid the usage of null
+     */
     private String safeArgumentSplit(String content) {
         String[] split = content.split(" ");
         if (split.length > 1) {
