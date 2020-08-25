@@ -41,7 +41,7 @@ public final class Autoplay extends AudioEventAdapter {
             return;
         }
         if (endReason.mayStartNext) {
-            musicPlayer.startPlay();
+            //musicPlayer.startPlay();
         }
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
         // endReason == LOAD_FAILED: Loading of a track failed (mayStartNext = true).

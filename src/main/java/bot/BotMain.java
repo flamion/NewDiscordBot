@@ -48,6 +48,29 @@ public class BotMain {
                 )
                 .then());
 
+        commands.put("play", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .flatMap(guildId -> event.getMessage().getChannel()
+                        .flatMap(channel -> Mono.just(event.getMessage().getContent())
+                                .doOnNext(ignored -> players.get(guildId).setMessageChannel(Mono.just(channel)))
+                                .doOnNext(content -> players.get(guildId).playLink(content))
+                        )
+                )
+                .then());
+
+        commands.put("disconnect", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).disconnect())
+                .then());
+
+        commands.put("fuckoff", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).disconnect())
+                .then());
+
         commands.put("botinfo", event -> event.getMessage().getChannel()
                 .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription("Uptime: " + TimeFormatter.generalTimeFormatter(System.currentTimeMillis() - UPSINCE))))
                 .then());
@@ -59,6 +82,8 @@ public class BotMain {
 
         gateway.on(ReadyEvent.class)
                 .subscribe(ready -> toConsole("Logged in as " + ready.getSelf().getUsername() + "#" + ready.getSelf().getDiscriminator()));
+
+
 
         gateway.getEventDispatcher().on(MessageCreateEvent.class)
                 .flatMap(event -> Mono.just(event.getMessage().getContent())
