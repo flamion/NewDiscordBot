@@ -24,7 +24,7 @@ interface Command {
 
 public class BotMain {
 
-    final static String PREFIX = "-";
+    final static String PREFIX = "~";
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Map<Long, GuildMusicPlayer> players = new ConcurrentHashMap<>();
     private static final BotMain bot = new BotMain();
@@ -94,6 +94,10 @@ public class BotMain {
 
         commands.put("botinfo", event -> event.getMessage().getChannel()
                 .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription("Uptime: " + TimeFormatter.generalTimeFormatter(System.currentTimeMillis() - UPSINCE))))
+                .then());
+
+        commands.put("help", event -> event.getMessage().getChannel()
+                .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription(Help.getHelp(event.getMessage().getContent()))))
                 .then());
     }
 
