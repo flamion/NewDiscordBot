@@ -12,7 +12,6 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
-
 import javax.sound.midi.Track;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,6 +84,16 @@ public class GuildMusicPlayer {
         if (player.getPlayingTrack() == null && queue.size() > 0) {
             player.playTrack(queue.get(0));
             queue.remove(0);
+        }
+    }
+
+    public void skip() {
+        if (player.getPlayingTrack() != null) {
+            player.stopTrack();
+            startPlay();
+            createEmbed("Track skipped");
+        } else {
+            createEmbed("No Track playing");
         }
     }
 

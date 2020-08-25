@@ -59,6 +59,12 @@ public class BotMain {
                 )
                 .then());
 
+        commands.put("skip", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).skip())
+                .then());
+
         commands.put("disconnect", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
