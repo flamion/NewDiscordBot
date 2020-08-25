@@ -30,6 +30,9 @@ public class GuildMusicPlayer {
     private boolean loop = false;
 
 
+    /**
+     * @param channel
+     */
     public GuildMusicPlayer(Mono<MessageChannel> channel) {
         this.channel = channel;
         playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
