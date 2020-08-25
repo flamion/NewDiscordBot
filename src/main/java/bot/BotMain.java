@@ -92,6 +92,18 @@ public class BotMain {
                 .doOnNext(guildId -> players.get(guildId).switchLoopState())
                 .then());
 
+        commands.put("pause", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).pause())
+                .then());
+
+        commands.put("resume", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).resume())
+                .then());
+
         commands.put("leave", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
@@ -109,7 +121,9 @@ public class BotMain {
                 .then());
 
         commands.put("help", event -> event.getMessage().getChannel()
-                .flatMap(channel -> channel.createEmbed(spec -> spec.setColor(Color.ORANGE).setDescription(Help.getHelp(event.getMessage().getContent()))))
+                .flatMap(channel -> channel.createEmbed(spec -> spec
+                        .setColor(Color.ORANGE)
+                        .setDescription(Help.getHelp(event.getMessage().getContent()))))
                 .then());
     }
 

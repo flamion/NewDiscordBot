@@ -122,6 +122,14 @@ public class GuildMusicPlayer {
         createEmbed("Cleared queue");
     }
 
+    public void pause() {
+        player.setPaused(!player.isPaused());
+    }
+
+    public void resume() {
+        player.setPaused(false);
+    }
+
     public void stopTrack() {
         player.stopTrack();
     }
