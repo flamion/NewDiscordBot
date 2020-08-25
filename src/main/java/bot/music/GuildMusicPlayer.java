@@ -58,6 +58,11 @@ public class GuildMusicPlayer {
 
     public void switchLoopState() {
         loop = !loop;
+        if (loop) {
+            createEmbed("Loop enabled");
+        } else {
+            createEmbed("Loop disabled");
+        }
     }
 
     public void playTrack(AudioTrack track) {
