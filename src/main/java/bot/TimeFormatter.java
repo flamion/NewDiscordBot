@@ -60,4 +60,30 @@ public class TimeFormatter {
         }
         return builder.toString();
     }
+
+    /**
+     * @param messageContent this is for the seek command. It takes the message content as input and converts the argument in the form hh:mm:ss to milliseconds.
+     *                       It ignores faults (e.g. 32:12:as or 65:32:50)
+     * @return returns the time converted to milliseconds or -1 if it was completely invalid
+     *
+     * Infos: This works only while hours < 60 and wont work for anything larger than hh:mm:ss (For example dd:hh:mm:ss, it will attempt to convert the days with incorrect count)
+     */
+    public static long seekToMillis(String messageContent) {
+        String[] split = messageContent.split(" |:");
+
+        if (split.length == 2 && split[1].matches("0|00")) {
+            return 0L; //return 0 if content is 0, no need to do the rest
+        }
+
+        int count = 1;
+        long millis = -1;
+        for (int i = split.length - 1; i > 0; i--) {
+            if (split[i].matches("[0-9]+") && Integer.parseInt(split[i]) < 59 && Integer.parseInt(split[i]) > 0) {
+                millis += (Integer.parseInt(split[i]) * count * 1000);
+            }
+            count *= 60;
+        }
+
+        return millis < 0 ? -1 : millis + 1L;
+    }
 }

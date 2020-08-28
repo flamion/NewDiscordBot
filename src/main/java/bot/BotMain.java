@@ -24,7 +24,7 @@ interface Command {
 
 public class BotMain {
 
-    final static String PREFIX = "~";
+    final static String PREFIX = "-";
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Map<Long, GuildMusicPlayer> players = new ConcurrentHashMap<>();
     private static final BotMain bot = new BotMain();
@@ -104,6 +104,12 @@ public class BotMain {
                 .doOnNext(guildId -> players.get(guildId).resume())
                 .then());
 
+        commands.put("seek", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .doOnNext(guildId -> players.get(guildId).setPosition(TimeFormatter.seekToMillis(event.getMessage().getContent())))
+                .then());
+
         commands.put("leave", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
@@ -134,7 +140,7 @@ public class BotMain {
         gateway.on(ReadyEvent.class)
                 .subscribe(ready -> toConsole("Logged in as " + ready.getSelf().getUsername() + "#" + ready.getSelf().getDiscriminator()));
 
-
+        
         gateway.getEventDispatcher().on(MessageCreateEvent.class)
                 .filterWhen(event -> Mono.justOrEmpty(event.getMessage().getAuthor()).map(user -> !user.isBot()))
                 .flatMap(event -> Mono.just(event.getMessage().getContent())

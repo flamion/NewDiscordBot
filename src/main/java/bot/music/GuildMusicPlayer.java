@@ -130,6 +130,12 @@ public class GuildMusicPlayer {
         player.setPaused(false);
     }
 
+    public void setPosition(long millis) {
+        if (player.getPlayingTrack() != null && millis < player.getPlayingTrack().getDuration() && millis >= 0) {
+            player.getPlayingTrack().setPosition(millis);
+        }
+    }
+
     public void stopTrack() {
         player.stopTrack();
     }
