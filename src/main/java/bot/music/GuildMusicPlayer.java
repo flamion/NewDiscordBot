@@ -14,6 +14,7 @@ import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class GuildMusicPlayer {
     }
 
     /**
-     * @param connection The currently active voiceconnection thats assigned to the player.
+     * @param connection The currently active voice connection that is assigned to the player.
      *                   In the Future this will be migrated to the Voice connection registry
      */
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
@@ -51,7 +52,7 @@ public class GuildMusicPlayer {
 
     /**
      * @param channel Sets the currently used Text Channel.
-     *                This is supposed to be updated every time the bot receives a new message thats relevant to the {@link GuildMusicPlayer}
+     *                This is supposed to be updated every time the bot receives a new message that is relevant to the {@link GuildMusicPlayer}
      */
     public void setMessageChannel(Mono<MessageChannel> channel) {
         this.channel = channel;
@@ -80,6 +81,10 @@ public class GuildMusicPlayer {
 
     public void addToQueue(AudioTrack track) {
         queue.add(track);
+    }
+
+    public void addToQueue(AudioTrack track, int index) {
+        queue.add(index, track);
     }
 
     public void addToQueue(List<AudioTrack> tracks) {
@@ -113,6 +118,8 @@ public class GuildMusicPlayer {
             builder.append("\nPage ").append(page).append(" of ").append((queue.size() / 15));
         } catch (IndexOutOfBoundsException ignore) {
 
+        } catch (NumberFormatException e) {
+            createEmbed(Color.RED, "Incorrect Arguments");
         }
         createEmbed(builder.toString());
     }
@@ -215,6 +222,18 @@ public class GuildMusicPlayer {
             playerManager.loadItem(safeArgumentSplit(content), scheduler);
         } else {
             createEmbed(Color.RED, "Invalid Link Provided");
+        }
+    }
+
+    public void next(String content) {
+
+    }
+
+    public void swap(int index1, int index2) {
+        if (index1 >= 0 && index2 >= 0) {
+            if (index1 < queue.size() && index2 < queue.size()) {
+                Collections.swap(queue, index1, index2);
+            }
         }
     }
 

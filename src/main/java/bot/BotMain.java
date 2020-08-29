@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,22 @@ public class BotMain {
                                 .doOnNext(ignored -> players.get(guildId).setMessageChannel(Mono.just(channel)))
                                 .doOnNext(content -> players.get(guildId).playLink(content))
                         )
+                )
+                .then());
+
+        commands.put("swap", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .flatMap(guildId -> Mono.justOrEmpty(event.getMessage().getContent())
+                        .map(content -> content.split(" "))
+                        .flatMapMany(Flux::fromArray)
+                        .filter(content -> content.matches("\\d+"))
+                        .collectList()
+                        .filter(list -> list.size() > 1)
+                        .doOnNext(list -> players.get(guildId).swap(Integer.parseInt(list.get(0)), Integer.parseInt(list.get(1))))
+                        .map(ignored -> "Swapped indexes")
+                        .switchIfEmpty(Mono.just("incorrect input"))
+                        .doOnNext(message -> players.get(guildId).createEmbed(message))
                 )
                 .then());
 
