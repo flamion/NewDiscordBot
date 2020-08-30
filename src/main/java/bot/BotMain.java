@@ -60,6 +60,17 @@ public class BotMain {
                 )
                 .then());
 
+        commands.put("next", event -> Mono.justOrEmpty(event.getGuildId())
+                .map(Snowflake::asLong)
+                .filter(players::containsKey)
+                .flatMap(guildId -> event.getMessage().getChannel()
+                        .flatMap(channel -> Mono.just(event.getMessage().getContent())
+                                .doOnNext(ignored -> players.get(guildId).setMessageChannel(Mono.just(channel)))
+                                .doOnNext(content -> players.get(guildId).next(content))
+                        )
+                )
+                .then());
+
         commands.put("swap", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)

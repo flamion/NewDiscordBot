@@ -232,7 +232,11 @@ public class GuildMusicPlayer {
     }
 
     public void next(String content) {
-
+        if (isValidLink(content)) {
+            playerManager.loadItem(safeArgumentSplit(content), scheduler, 0);
+        } else {
+            createEmbed(Color.RED, "Invalid Link Provided");
+        }
     }
 
     public void swap(int index1, int index2) {
