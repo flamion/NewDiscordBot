@@ -223,6 +223,11 @@ public class GuildMusicPlayer {
         voiceConnection.flatMap(VoiceConnection::disconnect).subscribe();
     }
 
+    /**
+     * @param content Message Content
+     *
+     *  Adds a track to the end of the queue
+     */
     public void playLink(String content) {
         if (isValidLink(content)) {
             playerManager.loadItem(safeArgumentSplit(content), scheduler, -1);
@@ -231,6 +236,11 @@ public class GuildMusicPlayer {
         }
     }
 
+    /**
+     * @param content Message Content
+     *
+     *  Adds a track at place 0 to the queue so it will play next
+     */
     public void next(String content) {
         if (isValidLink(content)) {
             playerManager.loadItem(safeArgumentSplit(content), scheduler, 0);
