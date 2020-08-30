@@ -249,10 +249,9 @@ public class GuildMusicPlayer {
         }
     }
 
-
     /**
-     * @param index1
-     * @param index2
+     * @param index1 Index of first track to be swapped
+     * @param index2 Index of second track to be swapped
      *
      * Swaps to tracks in the queue and checks whether they would even work
      */
