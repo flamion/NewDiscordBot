@@ -23,7 +23,7 @@ public class GuildMusicPlayer {
     private final List<AudioTrack> queue = new LinkedList<>();
     private final TrackScheduler scheduler = new TrackScheduler(this);
     private final Autoplay autoplay = new Autoplay(this);
-    private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+    private final CustomPlayerManager playerManager = new CustomPlayerManager();
     private final AudioPlayer player = playerManager.createPlayer();
     private final AudioProvider provider = new LavaPlayerAudioProvider(player);
     private Mono<VoiceConnection> voiceConnection;
@@ -79,20 +79,20 @@ public class GuildMusicPlayer {
         player.playTrack(track);
     }
 
-    public void addToQueue(AudioTrack track) {
-        queue.add(track);
+    public void addToQueue(int index, List<AudioTrack> tracks) {
+        if (index <= queue.size() && index >= 0) {
+            queue.addAll(index, tracks);
+        } else {
+            queue.addAll(tracks);
+        }
     }
 
-    public void addToQueue(AudioTrack track, int index) {
-        queue.add(index, track);
-    }
-
-    public void addToQueue(List<AudioTrack> tracks) {
-        queue.addAll(tracks);
-    }
-
-    public void addToQueue(int position, AudioTrack track) {
-        queue.add(position, track);
+    public void addToQueue(int index, AudioTrack track) {
+        if (index <= queue.size() && index >= 0) {
+            queue.add(index, track);
+        } else {
+            queue.add(track);
+        }
     }
 
     public void listQueue(String content) {
@@ -225,7 +225,7 @@ public class GuildMusicPlayer {
 
     public void playLink(String content) {
         if (isValidLink(content)) {
-            playerManager.loadItem(safeArgumentSplit(content), scheduler);
+            playerManager.loadItem(safeArgumentSplit(content), scheduler, -1);
         } else {
             createEmbed(Color.RED, "Invalid Link Provided");
         }

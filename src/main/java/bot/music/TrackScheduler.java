@@ -1,12 +1,11 @@
 package bot.music;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import discord4j.rest.util.Color;
 
-public final class TrackScheduler implements AudioLoadResultHandler {
+public final class TrackScheduler implements CustomAudioLoadResultHandler {
 
     private final GuildMusicPlayer guildMusicPlayer;
 
@@ -15,15 +14,15 @@ public final class TrackScheduler implements AudioLoadResultHandler {
     }
 
     @Override
-    public void trackLoaded(final AudioTrack track) {
-        guildMusicPlayer.addToQueue(track);
+    public void trackLoaded(AudioTrack track, int index) {
+        guildMusicPlayer.addToQueue(index, track);
         guildMusicPlayer.createEmbed(Color.GREEN, "Added track \"" + track.getInfo().title + "\" to the queue");
         guildMusicPlayer.startPlay();
     }
 
     @Override
-    public void playlistLoaded(final AudioPlaylist playlist) {
-        guildMusicPlayer.addToQueue(playlist.getTracks());
+    public void playlistLoaded(AudioPlaylist playlist, int index) {
+        guildMusicPlayer.addToQueue(index, playlist.getTracks());
         guildMusicPlayer.startPlay();
     }
 
