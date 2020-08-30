@@ -131,10 +131,16 @@ public class GuildMusicPlayer {
 
     public void pause() {
         player.setPaused(!player.isPaused());
+        if (player.isPaused()) {
+            createEmbed("Paused player");
+        } else {
+            createEmbed("Unpaused player");
+        }
     }
 
     public void resume() {
         player.setPaused(false);
+        createEmbed("Resumed player");
     }
 
     public void setPosition(long millis) {
