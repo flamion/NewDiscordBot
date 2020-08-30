@@ -249,6 +249,13 @@ public class GuildMusicPlayer {
         }
     }
 
+
+    /**
+     * @param index1
+     * @param index2
+     *
+     * Swaps to tracks in the queue and checks whether they would even work
+     */
     public void swap(int index1, int index2) {
         if (index1 >= 0 && index2 >= 0) {
             if (index1 < queue.size() && index2 < queue.size()) {
