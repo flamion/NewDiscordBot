@@ -253,7 +253,7 @@ public class GuildMusicPlayer {
      * @param index1 Index of first track to be swapped
      * @param index2 Index of second track to be swapped
      *
-     * Swaps to tracks in the queue and checks whether they would even work
+     * Swaps two tracks in the queue and checks whether they would even work
      */
     public void swap(int index1, int index2) {
         if (index1 >= 0 && index2 >= 0) {
@@ -261,6 +261,10 @@ public class GuildMusicPlayer {
                 Collections.swap(queue, index1, index2);
             }
         }
+    }
+
+    public void insert(String content) {
+
     }
 
     public void createEmbed(String text) {
