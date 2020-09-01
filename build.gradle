@@ -3,7 +3,7 @@ apply plugin: 'java'
 jar {
     manifest {
         attributes(
-                'Main-Class': 'bot.BotMain.class'
+                'Main-Class': 'bot.BotMain'
         )
     }
 }
