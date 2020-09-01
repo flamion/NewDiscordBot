@@ -293,9 +293,10 @@ public class GuildMusicPlayer {
      */
     private String safeArgumentSplit(String content) {
         String[] split = content.split(" ");
-        if (split.length > 1) {
-            return split[1];
-        }
-        return "";
+//        if (split.length > 1) {
+//            return split[1];
+//        }
+//        return "";
+        return split.length > 1 ? split[1] : "";
     }
 }

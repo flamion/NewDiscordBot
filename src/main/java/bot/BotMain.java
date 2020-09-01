@@ -179,7 +179,7 @@ public class BotMain {
         gateway.on(ReadyEvent.class)
                 .subscribe(ready -> toConsole("Logged in as " + ready.getSelf().getUsername() + "#" + ready.getSelf().getDiscriminator()));
 
-        
+
         gateway.getEventDispatcher().on(MessageCreateEvent.class)
                 .filterWhen(event -> Mono.justOrEmpty(event.getMessage().getAuthor()).map(user -> !user.isBot()))
                 .flatMap(event -> Mono.just(event.getMessage().getContent())
