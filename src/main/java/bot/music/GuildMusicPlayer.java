@@ -225,8 +225,8 @@ public class GuildMusicPlayer {
 
     /**
      * @param content Message Content
-     *
-     *  Adds a track to the end of the queue
+     *                <p>
+     *                Adds a track to the end of the queue
      */
     public void playLink(String content) {
         if (isValidLink(content)) {
@@ -238,8 +238,8 @@ public class GuildMusicPlayer {
 
     /**
      * @param content Message Content
-     *
-     *  Adds a track at place 0 to the queue so it will play next
+     *                <p>
+     *                Adds a track at place 0 to the queue so it will play next
      */
     public void next(String content) {
         if (isValidLink(content)) {
@@ -252,8 +252,8 @@ public class GuildMusicPlayer {
     /**
      * @param index1 Index of first track to be swapped
      * @param index2 Index of second track to be swapped
-     *
-     * Swaps two tracks in the queue and checks whether they would even work
+     *               <p>
+     *               Swaps two tracks in the queue and checks whether they would even work
      */
     public void swap(int index1, int index2) {
         if (index1 >= 0 && index2 >= 0) {
@@ -263,8 +263,16 @@ public class GuildMusicPlayer {
         }
     }
 
+    /**
+     * @param content Messagecontent containing a link and position in queue, for example -insert [link] [place in queue]
+     */
     public void insert(String content) {
-
+        String[] split = content.split(" ");
+        if (split.length > 2 && isValidLink(split[1]) && split[2].matches("\\d+")) {
+            playerManager.loadItem(split[1], scheduler, Integer.parseInt(split[2]));
+        } else {
+            createEmbed(Color.RED, "Wrong arguments given");
+        }
     }
 
     public void createEmbed(String text) {

@@ -71,7 +71,7 @@ public class BotMain {
                 )
                 .then());
 
-        commands.put("next", event -> Mono.justOrEmpty(event.getGuildId())
+        commands.put("insert", event -> Mono.justOrEmpty(event.getGuildId())
                 .map(Snowflake::asLong)
                 .filter(players::containsKey)
                 .flatMap(guildId -> event.getMessage().getChannel()
