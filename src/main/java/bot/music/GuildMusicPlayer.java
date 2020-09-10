@@ -2,8 +2,6 @@ package bot.music;
 
 import bot.TimeFormatter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer;
@@ -13,13 +11,14 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class GuildMusicPlayer {
 
+    private static final Pattern onlyNumbersPattern = Pattern.compile("\\d+");
     private final List<AudioTrack> queue = new LinkedList<>();
     private final TrackScheduler scheduler = new TrackScheduler(this);
     private final Autoplay autoplay = new Autoplay(this);
@@ -268,7 +267,7 @@ public class GuildMusicPlayer {
      */
     public void insert(String content) {
         String[] split = content.split(" ");
-        if (split.length > 2 && isValidLink(split[1]) && split[2].matches("\\d+")) {
+        if (split.length > 2 && isValidLink(split[1]) && onlyNumbersPattern.matcher(split[2]).find()) {
             playerManager.loadItem(split[1], scheduler, Integer.parseInt(split[2]));
         } else {
             createEmbed(Color.RED, "Wrong arguments given");
