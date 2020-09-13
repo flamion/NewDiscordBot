@@ -42,10 +42,14 @@ public class GuildMusicPlayer {
     }
 
     /**
-     * @param connection The currently active voice connection that is assigned to the player.
+     * @param connection Changes the currently active voice connection that is assigned to the player.
+     *                   If there is a currently active voice connection it will get terminated
      *                   In the Future this will be migrated to the Voice connection registry
      */
     public void setVoiceConnection(Mono<VoiceConnection> connection) {
+        if (this.voiceConnection != null) {
+            voiceConnection.flatMap(VoiceConnection::disconnect).subscribe();
+        }
         this.voiceConnection = connection;
     }
 
