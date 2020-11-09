@@ -278,14 +278,29 @@ public class GuildMusicPlayer {
         }
     }
 
+    /**
+     * @param text Sends the text as embed body into the currently associated text channel in discord.
+     *             Uses a standard color.
+     */
     public void createEmbed(String text) {
         channel.flatMap(messageChannel -> messageChannel.createEmbed(spec -> spec.setColor(Color.CYAN).setDescription(text))).subscribe();
     }
 
+    /**
+     * @param color Specify a color the embed should have
+     * @param text Sends the text as embed body into the currently associated text channel in discord.
+     */
     public void createEmbed(Color color, String text) {
         channel.flatMap(messageChannel -> messageChannel.createEmbed(spec -> spec.setColor(color).setDescription(text))).subscribe();
     }
 
+
+    /**
+     * @param link String that contains a link
+     * @return returns whether the link is a valid supported link
+     *
+     * More links can be added or removed without problems.
+     */
     private boolean isValidLink(String link) {
         return link.toLowerCase().contains("youtube") || link.toLowerCase().contains("youtu.be");
     }
@@ -296,10 +311,6 @@ public class GuildMusicPlayer {
      */
     private String safeArgumentSplit(String content) {
         String[] split = content.split(" ");
-//        if (split.length > 1) {
-//            return split[1];
-//        }
-//        return "";
         return split.length > 1 ? split[1] : "";
     }
 }

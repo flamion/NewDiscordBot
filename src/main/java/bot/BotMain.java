@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,6 @@ public class BotMain {
     final static String PREFIX = "-";
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Map<Long, GuildMusicPlayer> players = new ConcurrentHashMap<>();
-    private static final BotMain bot = new BotMain();
     private final static long UPSINCE = System.currentTimeMillis();
 
     static {
