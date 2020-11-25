@@ -4,7 +4,7 @@ public class Help {
 
     public static String getHelp(String input) {
         String[] stringArray = input.split(" ");
-        return getHelpMessage(stringArray[1]);
+        return getHelpMessage(stringArray.length > 1 ? stringArray[1] : "");
     }
 
     public static String getHelpMessage(String input) {
@@ -14,7 +14,7 @@ public class Help {
             case "join":
                 return input + " lets the bot enter the channel from the executing user.";
             case "play":
-                return input + " plays a song using a given URL. \nExample" + BotMain.PREFIX + input + " h t t p s : / / w w w . y o u t u b e . c o m / w a t c h ? v = m _ q l g F Q s 7 E 4";
+                return input + " plays a song using a given URL. \nExample" + BotMain.PREFIX + input + "<https://www.youtube.com/watch?v=m_qlgFQs7E4>";
             case "skip":
                 return input + " will skip the currently playing song.";
             case "loop":
