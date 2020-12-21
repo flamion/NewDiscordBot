@@ -23,6 +23,7 @@ public final class TrackScheduler implements CustomAudioLoadResultHandler {
     @Override
     public void playlistLoaded(AudioPlaylist playlist, int index) {
         guildMusicPlayer.addToQueue(index, playlist.getTracks());
+        guildMusicPlayer.createEmbed("Added playlist " + playlist.getName() + " to the queue");
         guildMusicPlayer.startPlay();
     }
 
