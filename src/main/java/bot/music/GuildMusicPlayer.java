@@ -229,7 +229,7 @@ public class GuildMusicPlayer {
     /**
      * @param content Message Content
      *                <p>
-     *                Adds a track to the end of the queue
+     *                Adds a track to the end of the queue, indicated by index -1
      */
     public void playLink(String content) {
         if (isValidLink(content)) {
